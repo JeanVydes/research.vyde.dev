@@ -104,16 +104,16 @@ const jsonLd = pageType === 'article' ? {
       }
       .cite .row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; min-width: 0; }
       .cite .row button { flex-shrink: 0; }
-      .snippet { max-width: 100%; overflow: hidden; min-width: 0; }
+      .snippet { max-width: 100%; min-width: 0; }
       .snippet pre {
-        margin: 0; padding: 0; white-space: pre-wrap; overflow-wrap: anywhere;
-        word-break: break-word; max-width: 100%; min-width: 0; overflow-x: auto;
+        margin: .5rem 0 0; padding: 0; white-space: pre-wrap; overflow-wrap: anywhere;
+        word-break: break-word; max-width: 100%; min-width: 0; overflow: visible;
       }
       .snippet code {
-        display: block; white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word;
-        max-width: 100%; min-width: 0;
+        display: block; width: 100%; white-space: pre-wrap; overflow-wrap: anywhere;
+        word-break: break-word; max-width: 100%; min-width: 0;
       }
-      .cite pre { white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; margin: .5rem 0 0; max-width: 100%; min-width: 0; }
+      .cite pre { white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; margin: .5rem 0 0; max-width: 100%; min-width: 0; overflow: visible; }
       code { font-size: .9em; overflow-wrap: anywhere; word-break: break-word; }
       .body p { text-align: justify; }
       .katex-display { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
