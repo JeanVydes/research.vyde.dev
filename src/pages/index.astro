@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const papers = (await getCollection('preprints')).sort(
+  (a, b) => +b.data.date - +a.data.date
+);
+
+const fmt = (d: Date) => d.toISOString().slice(0, 10);
+---
+<BaseLayout>
+  <h1>Preprints</h1>
+
+  {papers.map((p) => (
+    <article class="paper">
+      <h2><a href={`/preprints/${p.data.id}`}>{p.data.title}</a></h2>
+      <p class="meta">{p.data.authors.join(', ')} · <time datetime={fmt(p.data.date)}>{fmt(p.data.date)}</time> · <code>{p.data.id}</code></p>
+      {p.data.abstract && <p class="abstract">{p.data.abstract}</p>}
+      <div class="actions">
+        <a class="btn primary" href={`/preprints/${p.data.id}`}>View paper</a>
+        <a class="btn" href={p.data.pdf} download>PDF ↓</a>
+      </div>
+    </article>
+  ))}
+</BaseLayout>

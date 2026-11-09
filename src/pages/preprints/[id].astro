@@ -1,0 +1,88 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const papers = await getCollection('preprints');
+  return papers.map((paper) => ({
+    params: { id: paper.data.id },
+    props: { paper },
+  }));
+}
+
+const { paper } = Astro.props;
+const { Content } = await render(paper);
+
+const d = paper.data;
+const dateISO = new Date(d.date).toISOString().slice(0, 10);
+const year = new Date(d.date).getUTCFullYear();
+const siteName = 'Research — Preprints';
+const canonical = `https://research.vyde.dev/preprints/${d.id}`;
+const citation = `${d.authors.join(', ')}. ${d.title}. ${siteName} Preprint (${year}). Available at: ${canonical}`;
+---
+
+<BaseLayout
+  title={`${d.title} — ${d.id}`}
+  description={d.abstract ?? d.title}
+  pageType="article"
+  authors={d.authors}
+  dateISO={dateISO}
+  pdfUrl={d.pdf}
+  keywords={d.keywords ?? []}
+>
+  <p class="small muted"><a href="/">← All preprints</a></p>
+
+  <h1>{d.title}</h1>
+  <p class="meta">
+    {d.authors.join(', ')} · <time datetime={dateISO}>{dateISO}</time> · id: <code>{d.id}</code>
+    <button class="btn copy-id" id="copyIdBtn" type="button" title="Copy citation" aria-label="Copy citation for this paper">⧉</button>
+    {d.keywords && d.keywords.map((k) => <span class="tag">{k}</span>)}
+  </p>
+
+  {d.abstract && (
+    <>
+      <h2>Abstract</h2>
+      <p>{d.abstract}</p>
+    </>
+  )}
+
+  <div class="actions">
+    <a class="btn primary" href={d.pdf} target="_blank" rel="noopener noreferrer">View PDF ↗</a>
+    <a class="btn" href={d.pdf} download>Download ↓</a>
+  </div>
+
+  <aside class="cite" aria-label="How to cite">
+    <div class="row">
+      <h2>How to cite</h2>
+      <button class="btn" id="copyBtn" type="button">Copy citation</button>
+    </div>
+    <div class="snippet"><pre><code id="citeText">{citation}</code></pre></div>
+  </aside>
+
+  <div class="body">
+    <Content />
+  </div>
+
+  <script is:inline define:vars={{ citation }}>
+    async function copyCitation(btn, originalText) {
+      const text = document.getElementById('citeText')?.textContent ?? citation;
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const range = document.createRange();
+        range.selectNodeContents(document.getElementById('citeText'));
+        const sel = window.getSelection();
+        sel?.removeAllRanges();
+        sel?.addRange(range);
+      }
+      const label = btn.dataset.label || btn.textContent;
+      btn.textContent = 'Copied ✓';
+      setTimeout(() => (btn.textContent = label), 2000);
+    }
+    document.getElementById('copyBtn')?.addEventListener('click', (e) => copyCitation(e.currentTarget));
+    document.getElementById('copyIdBtn')?.addEventListener('click', (e) => {
+      const b = e.currentTarget;
+      copyCitation(b);
+    });
+  </script>
+</BaseLayout>
