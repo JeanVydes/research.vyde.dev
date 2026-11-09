@@ -100,20 +100,16 @@ const jsonLd = pageType === 'article' ? {
       }
       .cite {
         border: 1px solid #ddd; border-radius: 6px; padding: .8rem 1rem;
-        margin: 1.5rem 0; background: #fafafa; max-width: 100%; overflow: hidden; min-width: 0;
+        margin: 1.5rem 0; background: #fafafa; max-width: 100%; min-width: 0;
       }
       .cite .row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; min-width: 0; }
       .cite .row button { flex-shrink: 0; }
       .snippet { max-width: 100%; min-width: 0; }
-      .snippet pre {
-        margin: .5rem 0 0; padding: 0; white-space: pre-wrap; overflow-wrap: anywhere;
-        word-break: break-word; max-width: 100%; min-width: 0; overflow: visible;
+      .cite-text {
+        display: block; width: 100%; margin: .5rem 0 0; max-width: 100%; min-width: 0;
+        font: .9em/1.55 ui-monospace, SFMono-Regular, Menlo, monospace;
+        white-space: normal; overflow-wrap: anywhere; word-break: break-word;
       }
-      .snippet code {
-        display: block; width: 100%; white-space: pre-wrap; overflow-wrap: anywhere;
-        word-break: break-word; max-width: 100%; min-width: 0;
-      }
-      .cite pre { white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; margin: .5rem 0 0; max-width: 100%; min-width: 0; overflow: visible; }
       code { font-size: .9em; overflow-wrap: anywhere; word-break: break-word; }
       .body p { text-align: justify; }
       .katex-display { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
